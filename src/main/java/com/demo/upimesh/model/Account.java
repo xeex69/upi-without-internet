@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 public class Account {
 
     @Id
-    private String vpa; // Virtual Payment Address, e.g. "alice@demo"
+    private String vpa; // Virtual Payment Address, e.g. "alice@upi"
 
     @Column(nullable = false)
     private String holderName;
