@@ -1,14 +1,19 @@
-# Use Eclipse Temurin Java 17 runtime for a Spring Boot fat JAR
-FROM eclipse-temurin:17-jre-jammy
 
-# Create application directory
+FROM maven:3.9.6-eclipse-temurin-17 AS build
+
 WORKDIR /app
 
-# Copy the built Spring Boot JAR into the container
-COPY target/upi-offline-mesh-0.0.1-SNAPSHOT.jar app.jar
+COPY pom.xml ./
+COPY src ./src
 
-# Expose default Spring Boot port
+RUN mvn clean package -DskipTests
+
+FROM eclipse-temurin:17-jre-jammy
+
+WORKDIR /app
+
+COPY --from=build /app/target/upi-offline-mesh-0.0.1-SNAPSHOT.jar app.jar
+
 EXPOSE 8080
 
-# Run the application
 ENTRYPOINT ["java", "-jar", "app.jar"]
